@@ -1,0 +1,54 @@
+<html>
+    <head>
+      <script src="/public/scripts/jquery.min.js"></script>
+      <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/public/css/bootstrap-theme.min.css">
+      <link rel="stylesheet" href="/public/css/site.css">
+      <script src="/public/scripts/bootstrap.min.js"></script>
+      <script>
+        // Get Movie Details API
+        redirectHomePage = () => {
+        $('#movie').hide();
+        fetch('/getMovies',
+          {
+            type: 'GET',headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },dataType: 'jsonp'
+          }).then((res) => {
+            if (res.ok) {
+              return res.text();}
+            throw new Error('Fetch Movies Details Failed');
+          }).then((data) => {
+            //$("#movieByID").addClass("container").html(data);
+            //$("#movielist").html(data);
+          }).catch((error) => {
+            console.log(error);
+          });
+      }
+      </script>
+    </head>
+
+    <body>
+      <div id="movie" class="movie">
+        <% movies.forEach((movie) => { %>
+          <h1><%= movie.Title%></h1>
+          <img src="<%= movie.Images[0]%>" class="img-rounded" alt="Cinque Terre" width="304" height="236">
+          <h5><strong>Released : <%= movie.Released%></strong></h5>
+          <h5><strong>Runtime : <%= movie.Runtime%></strong></h5>
+          <h5><strong>Genre : <%= movie.Genre%></strong></h5>
+          <h5><strong>Director : <%= movie.Director%></strong></h5>
+          <h5><strong>Awards : <%= movie.Awards%></strong></h5>
+          <h5><strong>imdbRating : <%= movie.imdbRating%></strong></h5>
+          <h5><strong>imdbVotes : <%= movie.imdbVotes%></strong></h5>
+          <h5><strong>Language : <%= movie.Language%></strong></h5>
+          <h5><strong>Country <%= movie.Country%></strong></h5>
+          <h5><strong>Actors <%= movie.Actors%></strong></h5>
+          <h5><strong>Writer : <%= movie.Writer%></strong></h5>
+          <h5><strong>Plot : <%= movie.Plot%></strong></h5>
+          <img src="<%= movie.Images[2]%>" class="img-rounded" alt="Cinque Terre" width="150" height="200">
+          <img src="<%= movie.Images[3]%>" class="img-rounded" alt="Cinque Terre" width="150" height="200">
+
+          <button onclick="redirectHomePage()" class="btn">back</button>
+
+        <% }) %>
+      </div> 
+    </body>
+</html>

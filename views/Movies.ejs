@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <script src="/public/scripts/jquery.min.js"></script>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/public/css/site.css">
+    <script src="/public/scripts/bootstrap.min.js"></script>
+    <script>
+
+      // Get Movies based on Genre API
+      fetchMoviesByGenre = (genre) => {
+        fetch('/getGenre/' + genre,
+          {
+            type: 'GET',headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },dataType: 'jsonp'
+          }).then((res)=>{
+            if (res.ok) {
+              return res.json();}
+            throw new Error('Fetch Movies By Genre Failed');
+          }).then((data) => {
+            $("#genre").html(data);
+            data.forEach((movieitem) => {
+              //console.log(movieitem)
+            });
+          }).catch((error) => {
+            console.log(error);
+          });
+        }
+
+      // Get Movie Details API
+      fetchMovieDetails = (movie_id) => {
+        $('#movielist').hide();
+        fetch('/getMovie/' + movie_id,
+          {
+            type: 'GET',headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },dataType: 'jsonp'
+          }).then((res) => {
+            if (res.ok) {
+              return res.text();}
+            throw new Error('Fetch Movies Details Failed');
+          }).then((data) => {
+            $("#movieByID").addClass("container").html(data);
+          }).catch((error) => {
+            console.log(error);
+          });
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="header" class='header'>
+      <h1><strong>Movies World</strong></h1>
+    </div>
+    <div id="movielist" class="container">
+      <div class="movie">
+        <h2><strong>List of Movies</strong></h2>
+        <% movies.forEach((movie)=> { %>
+          <h4 onclick="fetchMovieDetails('<%= movie.movie_id %>')"><strong>
+            <%= movie.movie_name %>
+          </strong></h4>
+          <% }) %>
+      </div>
+    </div>
+    <div id="movieByID">  <!-- render UI dynamically based on the api call-->
+    </div>
+    <div id="genres" class="container-genre">
+      <div class="movie">
+        <h2>Movies Genres</h2>
+          <h4 id="Action" onclick="fetchMoviesByGenre(this.id)"><strong>Action</strong></h4>
+          <h4 id="Adventure" onclick=fetchMoviesByGenre(this.id)><strong>Adventure</strong></h4>
+          <h4 id="Drama" onclick=fetchMoviesByGenre(this.id)><strong>Drama</strong></h4>
+          <h4 id="Sci-Fi" onclick=fetchMoviesByGenre(this.id)><strong>Sci-fi</strong></h4>
+        <div id="genre" class="movie"> <!-- render UI dynamically based on the api call-->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

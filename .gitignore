@@ -1,0 +1,13 @@
+.DS_Store
+
+# UI service
+node_modules
+coverage
+build
+.DS_Store
+npm-debug.log*
+src/__test__
+src/setupTest.js
+
+
+
