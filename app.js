@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
+
 app.use('/public', express.static(path.join(__dirname,'public')));
 
 const routes = require('./routes/movie_routes.js')
@@ -20,3 +21,5 @@ app.set('view engine','ejs');
 app.listen(4000)
 
 module.exports = app;
+
+

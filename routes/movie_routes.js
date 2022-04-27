@@ -13,8 +13,8 @@ router.get('/',(req,res) => {
 })
 
 router.get('/getMovies',controller.getMovies)
-router.get('/comingsoon',controller.getComingSoonMovies)
-router.get('/getGenre/:genre',controller.getMoviebyGenre)
-router.get('/getMovie/:movie',controller.getMovieDetails)
+// router.get('/comingsoon',controller.getComingSoonMovies)
+// router.get('/getGenre/:genre',controller.getMoviebyGenre)
+// router.get('/getMovie/:movie',controller.getMovieDetails)
 
 module.exports = router;
