@@ -1,15 +1,15 @@
----
 # movies dummy service load balancer
 kind: Service
 apiVersion: v1
 metadata:
   name: movies-service
+  #namespace: movies-ns
 spec:
   #type: NodePort
   type: LoadBalancer
   ports:
     - port: 80
-      targetPort: 7000
+      targetPort: 3000
       protocol: TCP
       #nodePort: 31000
   selector:

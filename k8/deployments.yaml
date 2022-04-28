@@ -1,9 +1,9 @@
-# Description : movies dummy service
-
+# Description : dummy service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: movies-service
+  #namespace: movies-ns
 spec:
   replicas: 1
   selector:
@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
         - name: movies-service
-          image: hari5115/pg:v1
+          image: hari5115/pg-test:v2
           ports:
-            - containerPort: 7000
+            - containerPort: 3000
           env:
             - name: DB_CONNECTION
               valueFrom:
@@ -49,22 +49,16 @@ spec:
 
         # cloud SQL proxy container as side car container 
         - name: cloud-sql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.17
+          image: gcr.io/cloudsql-docker/gce-proxy:1.28.0
           command:
             - "/cloud_sql_proxy"
-            - "-instances=sandbox-db-enablers:us-central1:sqlpostgre5"
-            - "-credential_file=/secrets/service_account.json"
+            - "-instances=sandbox-db-enablers:us-central1:sqlpostgre5=tcp:0.0.0.0:5432"
           securityContext:
             runAsNonRoot: true
-          volumeMounts:
-          - name: movies-ksa-gca-volume
-            mountPath: /secrets/
-            readOnly: true
           resources:
             requests:
               memory: "2Gi"
               cpu:    "1"
-      volumes:
-        - name: movies-ksa-gca-volume
-          secret:
-            secretName: movies-ksa-gca-secret
+      serviceAccountName: movies-ksa
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"
