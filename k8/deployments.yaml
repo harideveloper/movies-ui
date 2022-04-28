@@ -1,0 +1,70 @@
+# Description : movies dummy service
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movies-service
+  template:
+    metadata:
+      labels:
+        app: movies-service
+    spec:
+      containers:
+        - name: movies-service
+          image: hari5115/pg:v1
+          ports:
+            - containerPort: 7000
+          env:
+            - name: DB_CONNECTION
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: DB_CONNECTION
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: DB_PASS
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: DB_HOST
+          imagePullPolicy: Always
+
+        # cloud SQL proxy container as side car container 
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.17
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances=sandbox-db-enablers:us-central1:sqlpostgre5"
+            - "-credential_file=/secrets/service_account.json"
+          securityContext:
+            runAsNonRoot: true
+          volumeMounts:
+          - name: movies-ksa-gca-volume
+            mountPath: /secrets/
+            readOnly: true
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu:    "1"
+      volumes:
+        - name: movies-ksa-gca-volume
+          secret:
+            secretName: movies-ksa-gca-secret

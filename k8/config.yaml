@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: config
+data:
+    # Backend Service
+    DB_USER: moviesuser
+    DB_PASS: moviesuser
+    DB_NAME: moviesuser
+    DB_HOST: localhost:5432
+    DB_CONNECTION: sandbox-db-enablers:us-central1:sqlpostgre5

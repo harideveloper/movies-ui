@@ -12,13 +12,13 @@ const routes = require('./routes/movie_routes.js')
 app.use('/',routes);
 app.set('view engine','ejs');
 
-// app.set('views',path.join(__dirname,'views'));
+app.set('views',path.join(__dirname,'views'));
 
 
 
 
 
-app.listen(4000)
+//app.listen(4000)
 
 module.exports = app;
 
